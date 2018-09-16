@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+
+<head>
+    <title> CanvasPong</title>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="1000" height="900"></canvas>
+
+    <script>
+        var canvas, canvasContext;
+
+        window.onload = function() {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            document.addEventListener('keydown', keyPressed)
+            document.addEventListener('keyup', keyReleased)
+
+            setInterval(mainLoop, 1000 / 50);
+        }
+
+        var ballXpos = 0;
+        var ballYpos = 0;
+        var ballXspeed = 7;
+        var ballYspeed = 7;
+        var ballWidth = 30;
+        var ballHeight = 30;
+
+        var playerXpos = 0;
+        var playerYpos = 0;
+        const PLAYER_SIZE = 30
+        
+        
+        var ballCount = 3;
+        var balls = [];
+        
+        var leftArrowPressed = false;
+        var rightArrowPressed = false;
+        
+        const LEFT_ARROW = 37;
+        const RIGHT_ARROW = 39;
+
+        function mainLoop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black') //BG
+            colorRect(ballXpos, ballYpos, ballWidth, ballHeight, 'red') //BALL
+            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'white') //player
+
+            ballBounce();
+            playerMove();
+        }
+
+
+
+        function keyPressed(evt) {
+
+            console.log(evt.keyCode) // in console with state the number associated with the key pressed 
+            if (evt.keyCode == LEFT_ARROW) { // 37 should be a const   
+                leftArrowPressed = true; // opposite should be done for keyRelease function  
+            }
+            if (evt.keyCode == RIGHT_ARROW) {  
+                rightArrowPressed = true; 
+            }
+
+        }
+        
+         function keyReleased(evt) {
+
+            console.log(evt.keyCode) // in console with state the number associated with the key pressed 
+            if (evt.keyCode == LEFT_ARROW) { // 37 should be a const   
+                leftArrowPressed = false; // opposite should be done for keyRelease function  
+            }
+            if (evt.keyCode == RIGHT_ARROW) { // 37 should be a const   
+                rightArrowPressed = false; // opposite should be done for keyRelease function  
+            }
+
+        }
+
+
+        function ballBounce() {
+            ballXpos += ballXspeed;
+            ballYpos += ballYspeed;
+
+            if (ballXpos > canvas.width - ballWidth) { // Right Edge Bounce
+                ballXspeed *= -1;
+
+            }
+            if (ballXpos < 0) { // Left Edge Bounce
+                ballXspeed *= -1;
+            }
+
+            if (ballYpos > canvas.height - ballHeight) { //Bottom Bounce           
+                ballYspeed *= -1;
+            }
+
+            if (ballYpos < 0) { // Top Bounce
+                ballYspeed *= -1;
+            }
+
+
+        }
+        
+        function playerMove(){
+            if(leftArrowPressed){
+               playerXpos -= 5
+               }
+        }
+
+
+        function colorRect(x, y, w, h, color) {
+            canvasContext.fillStyle = color;
+            canvasContext.fillRect(x, y, w, h);
+        }
+
+    </script>
